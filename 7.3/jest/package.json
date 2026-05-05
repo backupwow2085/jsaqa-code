@@ -2,18 +2,25 @@
   "name": "jsaqa_3",
   "version": "1.0.0",
   "description": "jest test",
-  "main": "index.js",
-  "scripts": {
-    "test": "jest"
-  },
   "keywords": [
     "jest",
     "test",
     "jsaqa"
   ],
-  "author": "omelnikova",
   "license": "ISC",
+  "author": "omelnikova",
+  "type": "commonjs",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --collectCoverage"
+  },
   "devDependencies": {
-    "jest": "^27.3.1"
+    "jest": "^27.5.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
   }
 }
