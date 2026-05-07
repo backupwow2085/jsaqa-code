@@ -1,22 +1,31 @@
-const { test, expect } = require("@playwright/test");
+import { user, invalidUser } from "../user.js";
+import { test, expect } from '@playwright/test';
 
-test("test", async ({ page }) => {
-  // Go to https://netology.ru/free/management#/
-  await page.goto("https://netology.ru/free/management#/");
-
-  // Click a
-  await page.click("a");
-  await expect(page).toHaveURL("https://netology.ru/");
-
-  // Click text=Учиться бесплатно
-  await page.click("text=Учиться бесплатно");
-  await expect(page).toHaveURL("https://netology.ru/free");
-
-  page.click("text=Бизнес и управление");
-
-  // Click text=Как перенести своё дело в онлайн
-  await page.click("text=Как перенести своё дело в онлайн");
-  await expect(page).toHaveURL(
-    "https://netology.ru/programs/kak-perenesti-svoyo-delo-v-onlajn-bp"
-  );
+test("authorizationTest", async ({ page }) => {
+  await page.goto("https://netology.ru/");
+  await page.click("text=Войти");
+  await page.click("text=Войти по почте");
+  await page.fill("input[name='email']", user.email);
+  await page.fill("input[name='password']", user.password);
+  await page.click("data-testid=login-submit-btn");
+  await page.pause();
+  //Необходимо пройти капчу
+  await expect(page).toHaveURL(/\/profile/);
+  await expect(page.locator('[class="------libs-shared-src-reallyShared-components-User--profileText--vDqvQ"]')).toHaveText(
+  'Моё обучение');
 });
+
+test("invalidLoginTest", async ({ page }) => {
+  await page.goto("https://netology.ru/");
+  await page.click("text=Войти");
+  await page.click("text=Войти по почте");
+  await page.fill("input[name='email']", invalidUser.email);
+  await page.fill("input[name='password']", invalidUser.password);
+  await page.click("data-testid=login-submit-btn");
+  await page.pause();
+  //Необходимо пройти капчу
+await expect(page.locator('[data-testid="login-error-hint"]')).toBeVisible();
+await expect(page.locator('[data-testid="login-error-hint"]')).toHaveText(
+  'Вы ввели неправильно логин или пароль.'
+);
+  });;
